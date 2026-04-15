@@ -1,0 +1,86 @@
+# SEF: Structured Explainability Framework - Experiment Configuration
+# Paper: "From 'Thinking' to 'Justifying'" (ACL 2026 Findings)
+
+# Models (Section 4.1): four 12-14B instruction-tuned models
+models:
+  deepseek_r1_14b:
+    name: "DeepSeek-R1-Distill-Qwen-14B"
+    hf_id: "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
+  gemma_3_12b:
+    name: "Gemma 3 12B"
+    hf_id: "google/gemma-3-12b-it"
+  ministral_14b:
+    name: "Ministral-3-14B"
+    hf_id: "mistralai/Ministral-3-14B-Instruct-2512"
+  qwen_2_5_14b:
+    name: "Qwen 2.5 14B"
+    hf_id: "Qwen/Qwen2.5-14B-Instruct"
+
+# Datasets (Section 4.1 & Appendix A.4): 1,618 test samples across 4 tasks
+domains:
+  legal:
+    datasets:
+      - name: hearsay
+        source: "nguha/legalbench"
+        description: "Applying Federal Rule of Evidence 801(c)"
+      - name: consumer_contracts_qa
+        source: "nguha/legalbench"
+        description: "Identifying unfair terms in consumer contracts"
+  medical:
+    datasets:
+      - name: pubmedqa
+        source: "qiaojin/PubMedQA"
+        subset: "pqa_labeled"
+        description: "Answering biomedical research questions (Yes/No only)"
+  financial:
+    datasets:
+      - name: fpb
+        source: "nickmuchi/financial-classification"
+        description: "Classifying sentiment in financial news phrases"
+
+# Baseline methods (Section 4.1)
+baselines:
+  - direct
+  - standard_cot
+  - tree_of_thought
+  - chain_of_verification
+  - vanilla_rag
+  - self_rag
+
+# SEF components (Section 3)
+sef_components:
+  presentation:
+    - AFL  # Answer First/Last
+    - AC   # Answer Clarity
+    - CI   # Conclusion Isolation
+  domain_reasoning:
+    - DTC  # Domain Terminology Consistency
+    - CEA  # Conclusion-Evidence Alignment
+    - FS   # Fact Specificity
+
+# Ablation variants (Section 4.4)
+ablations:
+  - full
+  - no_afl
+  - no_ac
+  - no_ci
+  - no_dtc
+  - no_cea
+  - no_fs
+  - no_presentation   # Remove all presentation (AFL+AC+CI)
+  - no_domain          # Remove all domain reasoning (DTC+CEA+FS)
+
+# vLLM server settings
+vllm:
+  server_url: "http://localhost:8000/v1"
+  temperature: 0
+  max_tokens: 4096
+
+# Experiment settings
+experiment:
+  parallel_workers: 8
+  save_explanations: true
+  output_dir: "results/raw"
+  max_samples: null  # Use all samples
+  iterations: 1
+  majority_voting: true

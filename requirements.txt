@@ -1,0 +1,24 @@
+# SEF: Structured Explainability Framework
+# Paper: "From 'Thinking' to 'Justifying'" (ACL 2026 Findings)
+
+# LLM inference
+vllm>=0.4.0
+openai>=1.0.0
+
+# Data loading
+datasets>=2.14.0
+huggingface-hub>=0.20.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Deep learning (required by vllm)
+torch>=2.0.0
+transformers>=4.35.0
+
+# Utilities
+tqdm>=4.65.0
+pyyaml>=6.0
+tenacity>=8.2.0
+
+# Analysis
+scipy>=1.10.0
